@@ -5,28 +5,29 @@ Elliot Williams
 """
 #%%
 from selenium import webdriver as wb
+import sys
 
 
 def scrapeOscars(year="1998"):
     # Loads up Selenium WebDriver with Google Chrome
     driver = wb.Chrome()
-    
+
     try:
         # Directs the slave browser to the Oscars DB Site
         url = "http://aaspeechesdb.oscars.org/"
         driver.get(url)
-        
+
         # Selects the Input Box corresponding to the Awards Year
         year_xpath = '//input[@id="QI0"]'
         r = driver.find_element_by_xpath(year_xpath)
         r.send_keys(year)
-     
+
         # Finds the Search button, and clicks it
         driver.find_element_by_xpath("//input[@id='body_SearchButton']").click()
-        
+
         # Gets all of the links to each speech made at the Oscars that year
-        speechLinkElements = driver.find_elements_by_xpath("//div[@id='main']/div/p") 
-        
+        speechLinkElements = driver.find_elements_by_xpath("//div[@id='main']/div/p")
+
         # Scrapes the speech data and metadata for each link
         speechResult = []
         for i in range(0, len(speechLinkElements)):
@@ -44,8 +45,11 @@ def scrapeOscars(year="1998"):
         print("Exception hit", e)
     driver.close()
     return speechResult
-    
+
 year = "1998"
+# If there is a command line argument, that's the year we want to scrape
+if len(sys.argv) == 2:
+    year = sys.argv[1]
 speechResult = scrapeOscars(year)
 
 #%%
@@ -58,7 +62,7 @@ speechResult = list(map(lambda x: x.replace("""© Academy of Motion Picture Arts
 
 '''
 Helper function to parse regex on a list, analogous to sapply in R
-(I prefer this because it prevents me from having to make ugly map lambda 
+(I prefer this because it prevents me from having to make ugly map lambda
 expressions in every line)
 '''
 def sapplyParseRegex(pattern, results, returnAfterMatch=False):
@@ -79,7 +83,7 @@ winner_data = sapplyParseRegex("(?<=Winner: ).*", speechResult)
 presenter_data = sapplyParseRegex("(?<=Presenter: ).*", speechResult)
 
 # Returns the speech if it exists, otherwise returns the empty string
-speech_data = sapplyParseRegex("[A-Z ]+:|(?<=\[Winner not present\.\])", 
+speech_data = sapplyParseRegex("[A-Z ]+:|(?<=\[Winner not present\.\])",
                                speechResult, True)
 
 #%%
