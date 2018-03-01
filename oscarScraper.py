@@ -1,15 +1,10 @@
-# -*- coding: utf-8 -*-
 """
-Spyder Editor
-
-This is a temporary script file.
+Oscar Scraper
+February 26th, 2018
+Elliot Williams
 """
-
-
-
 #%%
 from selenium import webdriver as wb
-import time
 
 
 def scrapeOscars(year="1998"):
@@ -62,7 +57,7 @@ speechResult = list(map(lambda x: x.replace("""© Academy of Motion Picture Arts
 [Note: All winners are present except where noted; NOT all winners may have spoken.]""", "").strip(), speechResult))
 
 '''
-Helper function to parse regex on a list, analagous to sapply in R
+Helper function to parse regex on a list, analogous to sapply in R
 (I prefer this because it prevents me from having to make ugly map lambda 
 expressions in every line)
 '''
@@ -88,5 +83,11 @@ speech_data = sapplyParseRegex("[A-Z ]+:|(?<=\[Winner not present\.\])",
                                speechResult, True)
 
 #%%
+# Writes result to csv
+import csv
 result_df = zip(year_data, cat_data, title_data, winner_data, presenter_data, speech_data)
-writer = csv.writer(year+".csv", "w")
+with open(year+".csv", "w") as f:
+    writer = csv.writer(f)
+    writer.writerow(["Awards", "Category", "Film Title", "Winner", "Presenter", "Speech"])
+    for row in result_df:
+        writer.writerow(row)
