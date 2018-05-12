@@ -24,3 +24,6 @@ Run `pip3 install selenium` and you should be good to go.
 Run `python oscarScraper.py [year]` to scrape the oscar awards for that
 particular year. The script will save all speech data for that year within
 `[year].csv` in the same directory.
+
+If you want to scrape multiple years, run `python oscarScraper.py [start_year] [end_year]`,
+and the program will scrape from the start year to the end year inclusive.
