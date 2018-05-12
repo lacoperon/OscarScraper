@@ -100,6 +100,11 @@ class OscarScraper:
             speech_index_list = zip(speechResult, index_list)
             return list(map(lambda x: x[0][x[1]:], speech_index_list))
 
+    '''
+    This function parses the speechResult data returned from `scrapeOscars`
+    into the various data points of interest, and writes the produced data
+    to csv file format.
+    '''
     def parseAndWriteData(self, speechResult):
         # Basic Stripping of Boilerplate from the speeches, leaving only useful information
         speechResult = list(map(lambda x:
