@@ -154,4 +154,4 @@ if __name__ == "__main__":
 
     # Otherwise, let's scrape 1998 by default
     if len(sys.argv) == 1:
-        OscarScraper(1998)
+        OscarScraper(1998, 1998)
